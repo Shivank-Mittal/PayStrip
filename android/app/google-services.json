@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "346158125898",
+    "firebase_url": "https://flutter-paystrip.firebaseio.com",
+    "project_id": "flutter-paystrip",
+    "storage_bucket": "flutter-paystrip.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346158125898:android:f088d4c7ce4c813ca1e7b3",
+        "android_client_info": {
+          "package_name": "com.example.payStrip"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "346158125898-m6rcmeeq65etgqh1n4qni4qe0j78fh4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDABZZ-yzT5dMMKjeR34XdGX2uFycmgdBU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "346158125898-m6rcmeeq65etgqh1n4qni4qe0j78fh4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
