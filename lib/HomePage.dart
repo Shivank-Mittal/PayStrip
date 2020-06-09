@@ -42,20 +42,47 @@ class _HomePageState extends State<HomePage> {
     _auth.signOut();
   }
 
+  getAmountDialog(BuildContext context){
+
+    TextEditingController amountControler = TextEditingController();
+
+   return showDialog(
+      context: context,
+      builder: (context)=> AlertDialog(
+        title: Text('Enter The Amount'),
+        content: TextField(
+          controller: amountControler,
+        ) ,
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('Pay'),
+            onPressed:(){
+            Navigator.of(context).pop(amountControler.text.toString());
+            },
+          ),
+        ],
+        elevation: 20.0,
+        ),
+    );
+  }
+
+
   onItemPress(BuildContext context , int index)  async{
 
     ProgressDialog dialog = ProgressDialog(context);
     dialog.style(
-      message: 'Processing ...'
+      message: 'Please Wait ...'
     );
     
-
-     await dialog.show();
     switch (index) {
       case 0:
-        var responce = await StripeService.payWithNewCard( amount: '200',currency: 'usd' );
+
+       String amountVal = await getAmountDialog(context);
+      await dialog.show();
+        var responce = await StripeService.payWithNewCard( amount: amountVal ,currency: 'usd' );
           
-        await dialog.hide();  
+      await dialog.hide();  
         Scaffold.of(context).showSnackBar(
             SnackBar(
               backgroundColor: !responce.success ? Colors.red : Colors.green,

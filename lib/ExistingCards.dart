@@ -5,6 +5,7 @@ import 'package:progress_dialog/progress_dialog.dart';
 import 'payment-service.dart';
 
 class ExistingCardsPage extends StatefulWidget {
+
   @override
   _ExistingCardsPageState createState() => _ExistingCardsPageState();
 }
@@ -25,11 +26,40 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
     'showBackView': false,
   }];
 
+  getAmountDialog(BuildContext context){
+
+    TextEditingController amountControler = TextEditingController();
+
+   return showDialog(
+      context: context,
+      builder: (context)=> AlertDialog(
+        title: Text('Enter The Amount'),
+        content: TextField(
+          controller: amountControler,
+        ) ,
+        actions: <Widget>[
+          MaterialButton(
+            elevation: 5.0,
+            child: Text('Pay'),
+            onPressed:(){
+            Navigator.of(context).pop(amountControler.text.toString());
+            },
+          ),
+        ],
+        elevation: 20.0,
+        ),
+    );
+  }
+
   payViaExistingCard(BuildContext context, card) async{
+
     ProgressDialog dialog = ProgressDialog(context);
     dialog.style(
       message: 'Processing ...'
     );
+
+    String amountVal = await getAmountDialog(context);
+    
 
     await dialog.show();
     var expiryArr = card['expiryDate'].split('/');
@@ -39,20 +69,20 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
       expYear: int.parse(expiryArr[1])
     );
 
-    var responce = await StripeService.payViaExistingCard( amount: '35600',currency: 'USD',card : stripeCard);
+    var responce = await StripeService.payViaExistingCard( amount: amountVal ,currency: 'USD',card : stripeCard);
 
     await dialog.hide();
-         Scaffold.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: !responce.success ? Colors.red : Colors.green,
-              content: Text(responce.message),
-              duration: new Duration(milliseconds: 1200),),
-          ).closed.then((_){
-            Navigator.pop(context);
-          }
-        ) ;
-    
-  
+    Scaffold.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: !responce.success ? Colors.red : Colors.green,
+        content: Text(responce.message),
+        duration: new Duration(milliseconds: 1200),
+      ),
+    ).closed.then((_)
+      {
+        Navigator.pop(context);
+      }
+    );
 }
 
   @override
