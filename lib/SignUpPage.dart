@@ -141,12 +141,12 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                       Container(
                         //SignIn Button
-                        padding:  EdgeInsets.fromLTRB(0, 20.0, 0, 40.0),
+                        padding:  EdgeInsets.fromLTRB(0, 20.0, 0, 20.0),
                         child: RaisedButton(
                           padding: EdgeInsets.fromLTRB(100.0, 20.0, 100.0, 20.0),
                           color: Colors.purpleAccent,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                          child: Text('Sign In', 
+                          child: Text('Sign Up', 
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0
@@ -161,7 +161,7 @@ class _SignupPageState extends State<SignupPage> {
                         
                         onTap: (){navigateToSigninScreen();},
                         child: Text(
-                          'Create and account?',
+                          'Sign In',
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 16.0),
                         ),

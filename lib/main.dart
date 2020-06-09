@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:payStrip/ExistingCards.dart';
 import 'HomePage.dart';
 import 'SignInPage.dart';
 import 'SignUpPage.dart';
@@ -17,6 +18,7 @@ class PayStrip extends StatelessWidget {
       routes: <String,WidgetBuilder>{
         "/SignInPage":(BuildContext context) =>SigninPage(),
         "/SignUpPage":(BuildContext context) =>SignupPage(),
+        "/ExistingCards":(BuildContext context) =>ExistingCardsPage(),
 
       },
     );

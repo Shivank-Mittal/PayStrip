@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:payStrip/payment-service.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -40,6 +41,29 @@ class _HomePageState extends State<HomePage> {
     _auth.signOut();
   }
 
+  onItemPress(BuildContext context , int index){
+    print('index : ${index.toString()}');
+
+    switch (index) {
+      case 0:
+        var responce = StripeService.payWithNewCard( amount: '200',currency: 'EURO' );
+
+        if(responce.success == true){
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green ,
+              content: Text(responce.message),
+              duration: new Duration(milliseconds: 1200),),
+          );
+        }
+        break;
+      case 1:
+        Navigator.pushNamed(context, "/ExistingCards");
+      break;
+      default:
+    }
+  }
+
   @override
   void initState(){
     super.initState();
@@ -67,60 +91,35 @@ class _HomePageState extends State<HomePage> {
         child: Center(
           child: !isSignedIn
           ? CircularProgressIndicator()
-          : Column(
-            children: <Widget>[
-              Container(
-                padding:  EdgeInsets.all(50),
-                child: Image(image: AssetImage("images/logo.png"),
-                width: 100.0,
-                height: 100.0,
-                ),
-              ),
-              Container(
-                child: Card(
-                  elevation: 40,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(20),
-                        child: SingleChildScrollView(
-                          child:TextFormField(
-                          decoration: InputDecoration(
-                              labelText: 'Amount',
-                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))
-                            ),
-                          ) ,
-                        ),
-                      )
-                      
-                    ],
+          : ListView.separated(   
+            padding: EdgeInsets.all(20),
+            itemBuilder: (context,index){
+              Icon icon;
+              Text text;
+
+             switch(index){
+               case 0:
+                  icon = Icon(Icons.add_circle, color: Colors.purple,);
+                  text = Text('Donate via new card');
+                break;
+                 case 1:
+                    icon = Icon(Icons.credit_card, color: Colors.purple,);
+                    text = Text('Donate via existing card');
+                break;
+              }
+              return InkWell(
+                onTap: (){
+                  onItemPress(context,index);
+                },
+                child : ListTile(
+                        title: text,
+                        leading: icon,
                   ),
-                ),
-              )
-              // Container(
-              //   padding: EdgeInsets.all(50.0),
-              //   child: Text(
-              //     "Hello, ${user.displayName}, you are locked in as ${user.email} ",
-              //     style: TextStyle(fontSize: 20.0),
-              //   ),
-              // ),
-              // Container(
-              //   padding: EdgeInsets.all(20),
-              //   child: RaisedButton(
-              //     color: Colors.purple,
-              //     padding: EdgeInsets.fromLTRB(100.0, 20.0, 100.0, 20.0),
-              //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-              //     onPressed: (){signOut();},
-              //     child: Text('Signout', style: TextStyle(
-              //         color: Colors.white,
-              //         fontSize: 20.0
-              //         ),
-              //     ),
-              //   ),
-                
-              // )
-            ],
-          )
+              );
+            }, 
+            separatorBuilder:(context,index) => Divider(color: Colors.purple,),
+            itemCount: 2
+          ) ,
         ),
       ),
     );
