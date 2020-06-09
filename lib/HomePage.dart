@@ -41,12 +41,12 @@ class _HomePageState extends State<HomePage> {
     _auth.signOut();
   }
 
-  onItemPress(BuildContext context , int index){
+  onItemPress(BuildContext context , int index)  async{
     print('index : ${index.toString()}');
 
     switch (index) {
       case 0:
-        var responce = StripeService.payWithNewCard( amount: '200',currency: 'EURO' );
+        var responce = await StripeService.payWithNewCard( amount: '200',currency: 'EURO' );
 
         if(responce.success == true){
           Scaffold.of(context).showSnackBar(
@@ -69,6 +69,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     this.chechAuthentication();
     this.getUser();
+
+    //To initialize stripe System 
+    StripeService.init();
   }
 
   @override
