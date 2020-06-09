@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:payStrip/payment-service.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -42,20 +43,25 @@ class _HomePageState extends State<HomePage> {
   }
 
   onItemPress(BuildContext context , int index)  async{
-    print('index : ${index.toString()}');
 
+    ProgressDialog dialog = ProgressDialog(context);
+    dialog.style(
+      message: 'Processing ...'
+    );
+    
+
+     await dialog.show();
     switch (index) {
       case 0:
-        var responce = await StripeService.payWithNewCard( amount: '200',currency: 'EURO' );
-
-        if(responce.success == true){
-          Scaffold.of(context).showSnackBar(
+        var responce = await StripeService.payWithNewCard( amount: '200',currency: 'usd' );
+          
+        await dialog.hide();  
+        Scaffold.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.green ,
+              backgroundColor: !responce.success ? Colors.red : Colors.green,
               content: Text(responce.message),
               duration: new Duration(milliseconds: 1200),),
           );
-        }
         break;
       case 1:
         Navigator.pushNamed(context, "/ExistingCards");

@@ -8,7 +8,6 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
 
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 

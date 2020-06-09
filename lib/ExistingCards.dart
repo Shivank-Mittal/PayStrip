@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_credit_card/flutter_credit_card.dart';
-
+import 'package:stripe_payment/stripe_payment.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'payment-service.dart';
 
 class ExistingCardsPage extends StatefulWidget {
@@ -17,30 +18,41 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
     'cvvCode': '424',
     'showBackView': false,
   }, {
-    'cardNumber': '5555555566554444',
+    'cardNumber': '5555555555554444',
     'expiryDate': '04/23',
     'cardHolderName': 'MSD',
     'cvvCode': '123',
     'showBackView': false,
   }];
 
-  payViaExistingContext(BuildContext context,dynamic card){
+  payViaExistingCard(BuildContext context, card) async{
+    ProgressDialog dialog = ProgressDialog(context);
+    dialog.style(
+      message: 'Processing ...'
+    );
 
-    var responce = StripeService.payViaExistingCard( amount: '200',currency: 'EURO',card : card);
+    await dialog.show();
+    var expiryArr = card['expiryDate'].split('/');
+    CreditCard stripeCard = CreditCard(
+      number: card['cardNumber'],
+      expMonth: int.parse(expiryArr[0]),
+      expYear: int.parse(expiryArr[1])
+    );
 
-        if(responce.success == true){
-          Scaffold.of(context).showSnackBar(
+    var responce = await StripeService.payViaExistingCard( amount: '35600',currency: 'USD',card : stripeCard);
+
+    await dialog.hide();
+         Scaffold.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.green ,
+              backgroundColor: !responce.success ? Colors.red : Colors.green,
               content: Text(responce.message),
-              duration: new Duration(milliseconds: 1200),
-              ),
+              duration: new Duration(milliseconds: 1200),),
           ).closed.then((_){
             Navigator.pop(context);
           }
         ) ;
     
-  }
+  
 }
 
   @override
@@ -64,7 +76,7 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
                   showBackView: false, //true when you want to show cvv(back) view
               ),
               onTap: (){
-                payViaExistingContext(context, card);
+                payViaExistingCard(context, card);
               },
             );
           },
