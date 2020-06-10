@@ -127,6 +127,13 @@ class _HomePageState extends State<HomePage> {
           Padding(padding: EdgeInsets.all(10)),
         ],
         ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 20,
+        onPressed: (){
+          Navigator.pushNamed(context, "/transactionList");
+        },
+        child: Icon(Icons.list),
+      ) ,
       body: Container(
         child: Center(
           child: !isSignedIn

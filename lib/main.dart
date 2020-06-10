@@ -3,6 +3,7 @@ import 'package:payStrip/ExistingCards.dart';
 import 'HomePage.dart';
 import 'SignInPage.dart';
 import 'SignUpPage.dart';
+import 'transactioList.dart';
 
 void main() => runApp(PayStrip());
 
@@ -19,6 +20,7 @@ class PayStrip extends StatelessWidget {
         "/SignInPage":(BuildContext context) =>SigninPage(),
         "/SignUpPage":(BuildContext context) =>SignupPage(),
         "/ExistingCards":(BuildContext context) =>ExistingCardsPage(),
+        "/transactionList":(BuildContext context) => TransactionList()
 
       },
     );
