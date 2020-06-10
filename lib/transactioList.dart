@@ -1,15 +1,22 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'database-service.dart';
 
 class TransactionList extends StatefulWidget {
+  String userEmail;
+  TransactionList({this.userEmail});
   @override
-  _TransactionListState createState() => _TransactionListState();
+  _TransactionListState createState() => _TransactionListState(userEmail);
 }
 
-class _TransactionListState extends State<TransactionList> {
+class _TransactionListState extends State<TransactionList>   {
 
-  DatabaseReference _databaseRefrence = FirebaseDatabase.instance.reference();
+  DatabaseReference _databaseRefrence = FirebaseDatabase.instance.reference(); 
+  String userEmail;
+  _TransactionListState(this.userEmail);
+   
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +26,7 @@ class _TransactionListState extends State<TransactionList> {
       ),
       body: Container(
         child: FirebaseAnimatedList(
-          query: _databaseRefrence,
+          query: _databaseRefrence.orderByChild("email").equalTo(userEmail),
           itemBuilder: (BuildContext context , DataSnapshot snataSnapsot, Animation<double> animation, int index ){
             return  Card(
               color: Colors.deepPurpleAccent,
@@ -37,7 +44,6 @@ class _TransactionListState extends State<TransactionList> {
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold ,color: Colors.white),
                       ),
                     ),
-                    
                   ],
                 )
               ),

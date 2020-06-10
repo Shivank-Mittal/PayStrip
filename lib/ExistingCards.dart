@@ -74,6 +74,7 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
 
     var user = await DatabaseService().getUser();
 
+    
     await DatabaseService().saveTransactionToDatabase(user.displayName, amountVal, user.email, responce.transactionID);
 
     await dialog.hide();

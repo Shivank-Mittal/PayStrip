@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:payStrip/payment-service.dart';
+import 'package:payStrip/transactioList.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'database-service.dart';
 
@@ -115,7 +116,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar( 
-        title: Text(user.displayName),
+        title: Text( user.displayName == null ? "" : user.displayName),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.power_settings_new,size: 30.0,),
@@ -130,7 +131,8 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         elevation: 20,
         onPressed: (){
-          Navigator.pushNamed(context, "/transactionList");
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>TransactionList(userEmail : user.email)));
         },
         child: Icon(Icons.list),
       ) ,
