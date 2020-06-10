@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:payStrip/payment-service.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'database-service.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -78,9 +79,12 @@ class _HomePageState extends State<HomePage> {
     switch (index) {
       case 0:
 
-       String amountVal = await getAmountDialog(context);
+      String amountVal = await getAmountDialog(context);
       await dialog.show();
-        var responce = await StripeService.payWithNewCard( amount: amountVal ,currency: 'usd' );
+
+      var responce = await StripeService.payWithNewCard( amount: amountVal+"00" ,currency: 'usd' );
+
+      await DatabaseService().saveTransactionToDatabase(user.displayName, amountVal, user.email, responce.transactionID);
           
       await dialog.hide();  
         Scaffold.of(context).showSnackBar(

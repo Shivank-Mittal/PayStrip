@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:stripe_payment/stripe_payment.dart';
 import 'package:http/http.dart' as http;
@@ -6,13 +7,16 @@ import 'package:http/http.dart' as http;
 class StripeTransactionResponce {
   String message;
   bool success;
-  StripeTransactionResponce({this.message, this.success});
+  String transactionID;
+  StripeTransactionResponce({this.message, this.success,this.transactionID});
 }
 
 //CHECK: why ({}) this in constructor
 
 
 class StripeService{
+
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static String _apiBaseUrl = 'https://api.stripe.com/v1';
   static String paymentApiUrl = '${ StripeService._apiBaseUrl}/payment_intents';
@@ -50,7 +54,8 @@ class StripeService{
       if(response.status == 'succeeded'){
         return  StripeTransactionResponce(
         message : 'transaction Successful',
-        success:true );
+        success:true,
+        transactionID: paymentIntent['id'] );
       }else{
         return  StripeTransactionResponce(
         message : 'transaction Successful',
@@ -65,9 +70,6 @@ class StripeService{
     }
 
 
-    return  StripeTransactionResponce(
-      message : 'transaction Successful',
-      success:true );
   }
 
   static  Future<StripeTransactionResponce> payWithNewCard({String amount, String currency})  async{
@@ -86,10 +88,13 @@ class StripeService{
         )
       );
 
+      
+
       if(response.status == 'succeeded'){
         return  StripeTransactionResponce(
         message : 'transaction Successful',
-        success:true );
+        success:true,
+        transactionID: paymentIntent['id'] );
       }else{
         return  StripeTransactionResponce(
         message : 'transaction Successful',
@@ -125,7 +130,12 @@ class StripeService{
     {
       print('Error Chaging User : ${e.toString()}');
     }
-
+    
     return null;
   }
+
+
+  
+  
+  
 }

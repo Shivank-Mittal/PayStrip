@@ -33,6 +33,11 @@ dependencies:
   stripe_payment: ^1.0.7
   http: ^0.12.1
   progress_dialog: ^1.2.4
+  firebase_database: ^3.1.6
+  firebase_core: ^0.4.5
+  firebase_storage: ^3.1.6
+  image_picker: ^0.6.0+1
+  url_launcher: ^4.1.0+1
 
 dev_dependencies:
   flutter_test:

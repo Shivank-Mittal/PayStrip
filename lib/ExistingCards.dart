@@ -3,6 +3,7 @@ import 'package:flutter_credit_card/flutter_credit_card.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'payment-service.dart';
+import 'database-service.dart';
 
 class ExistingCardsPage extends StatefulWidget {
 
@@ -42,7 +43,7 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
             elevation: 5.0,
             child: Text('Pay'),
             onPressed:(){
-            Navigator.of(context).pop(amountControler.text.toString());
+              Navigator.of(context).pop(amountControler.text.toString()); 
             },
           ),
         ],
@@ -69,7 +70,11 @@ class _ExistingCardsPageState extends State<ExistingCardsPage> {
       expYear: int.parse(expiryArr[1])
     );
 
-    var responce = await StripeService.payViaExistingCard( amount: amountVal ,currency: 'USD',card : stripeCard);
+    var responce = await StripeService.payViaExistingCard( amount: amountVal+"00" ,currency: 'USD',card : stripeCard); // added 00 because last two digits are after point value in Strip pay
+
+    var user = await DatabaseService().getUser();
+
+    await DatabaseService().saveTransactionToDatabase(user.displayName, amountVal, user.email, responce.transactionID);
 
     await dialog.hide();
     Scaffold.of(context).showSnackBar(
